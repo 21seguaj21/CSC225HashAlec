@@ -29,23 +29,42 @@ class HashTable:
 
     def insert(self, key):
         # TODO 1: Do not insert a duplicate. Use search() to check.
+        if self.search(key):
+            return
+
         # TODO 2: Check whether one more key would exceed the limit:
         #         linear: 0.70, quadratic: 0.50, chaining: 0.75.
         #         If so, call resize() BEFORE inserting the new key.
         #         Do this only after completing Milestone 4.
+
         # TODO 3: Use hash_key(key) to find the starting position.
         #         linear: try (start + i) % capacity
         #         quadratic: try (start + i*i) % capacity
         #         chaining: append to the list at the start position
-        # TODO 4: Increase count after inserting successfully.
-        pass
+        start = self.hash_key(key)
+        for i in range(self.capacity):
+            idx = (start + i) % self.capacity
+            if self.table[idx] is None:
+                self.table[idx] = key
+                # TODO 4: Increase count after inserting successfully.
+                self.count += 1
+                return
+
+        print("Table is full; cannot insert", key)
 
     def search(self, key):
         # TODO: Return True if key is stored, and False otherwise.
         # Use the same positions as insert() for each method.
         # In open addressing, stop at an empty position or after
         # capacity attempts. No deletion is required.
-        pass
+        start = self.hash_key(key)
+        for i in range(self.capacity):
+            idx = (start + i) % self.capacity
+            if self.table[idx] is None:
+                return False
+            if self.table[idx] == key:
+                return True
+        return False
 
     def resize(self):
         # TODO (Milestone 4):
