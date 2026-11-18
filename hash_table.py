@@ -36,9 +36,13 @@ class HashTable:
         #         If so, call resize() BEFORE inserting the new key.
         #         Do this only after completing Milestone 4.
 
-        # TODO 3 (chaining remaining):
-        #         chaining: append to the list at the start position
         start = self.hash_key(key)
+
+        if self.method == "chaining":
+            self.table[start].append(key)
+            self.count += 1
+            return
+
         for i in range(self.capacity):
             if self.method == "linear":
                 idx = (start + i) % self.capacity
@@ -53,8 +57,11 @@ class HashTable:
         print("Table is full; cannot insert", key)
 
     def search(self, key):
-        # TODO (chaining remaining): Use the same positions as insert() for each method.
         start = self.hash_key(key)
+
+        if self.method == "chaining":
+            return key in self.table[start]
+
         for i in range(self.capacity):
             if self.method == "linear":
                 idx = (start + i) % self.capacity
