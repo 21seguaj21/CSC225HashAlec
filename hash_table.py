@@ -31,10 +31,9 @@ class HashTable:
         if self.search(key):
             return
 
-        # TODO 2: Check whether one more key would exceed the limit:
-        #         linear: 0.70, quadratic: 0.50, chaining: 0.75.
-        #         If so, call resize() BEFORE inserting the new key.
-        #         Do this only after completing Milestone 4.
+        limits = {"linear": 0.70, "quadratic": 0.50, "chaining": 0.75}
+        if (self.count + 1) / self.capacity > limits[self.method]:
+            self.resize()
 
         start = self.hash_key(key)
 
@@ -75,15 +74,30 @@ class HashTable:
         return False
 
     def resize(self):
-        # TODO (Milestone 4):
-        # 1. Save your old table.
-        # 2. Change capacity to the next value in SIZES.
-        # 3. Make a new empty table of the correct kind.
-        # 4. Set count to 0.
-        # 5. Insert each old value again using insert().
-        #    For chaining, remember each position is a LIST.
-        # Do not just copy old values into the same positions.
-        pass
+        old_table = self.table
+        old_method = self.method
+
+        current_index = SIZES.index(self.capacity)
+        if current_index + 1 >= len(SIZES):
+            print("Maximum table size reached.")
+            return
+        self.capacity = SIZES[current_index + 1]
+
+        if old_method == "chaining":
+            self.table = [[] for _ in range(self.capacity)]
+        else:
+            self.table = [None] * self.capacity
+
+        self.count = 0
+
+        if old_method == "chaining":
+            for bucket in old_table:
+                for key in bucket:
+                    self.insert(key)
+        else:
+            for key in old_table:
+                if key is not None:
+                    self.insert(key)
 
     def show(self):
         print("\nMethod:", self.method, "| Hash:", self.hash_method)
