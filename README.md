@@ -45,7 +45,7 @@ Now complete `resize()` and add the load-factor check near the start of `insert(
 ## Finish and submit
 
 Test each of the three methods with both hash functions. Also test an absent value, a duplicate, and a resize. In this README or a separate `NOTES.md`, write 2–3 sentences answering: **Why can't you copy values into the same positions when the table grows?**
-
+---You cannot copy values directly into their old positions when the table grows because the hash functions compute indices modulo self.capacity, meaning a larger capacity maps existing keys to different starting indices. If values were left at their old indices, subsequent search() calls using the updated table capacity would look in the wrong locations and fail to find previously inserted keys.---
 After each milestone:
 
 ```bash
