@@ -28,7 +28,6 @@ class HashTable:
         return total % self.capacity
 
     def insert(self, key):
-        # TODO 1: Do not insert a duplicate. Use search() to check.
         if self.search(key):
             return
 
@@ -37,29 +36,31 @@ class HashTable:
         #         If so, call resize() BEFORE inserting the new key.
         #         Do this only after completing Milestone 4.
 
-        # TODO 3: Use hash_key(key) to find the starting position.
-        #         linear: try (start + i) % capacity
-        #         quadratic: try (start + i*i) % capacity
+        # TODO 3 (chaining remaining):
         #         chaining: append to the list at the start position
         start = self.hash_key(key)
         for i in range(self.capacity):
-            idx = (start + i) % self.capacity
+            if self.method == "linear":
+                idx = (start + i) % self.capacity
+            else:  # quadratic
+                idx = (start + i * i) % self.capacity
+
             if self.table[idx] is None:
                 self.table[idx] = key
-                # TODO 4: Increase count after inserting successfully.
                 self.count += 1
                 return
 
         print("Table is full; cannot insert", key)
 
     def search(self, key):
-        # TODO: Return True if key is stored, and False otherwise.
-        # Use the same positions as insert() for each method.
-        # In open addressing, stop at an empty position or after
-        # capacity attempts. No deletion is required.
+        # TODO (chaining remaining): Use the same positions as insert() for each method.
         start = self.hash_key(key)
         for i in range(self.capacity):
-            idx = (start + i) % self.capacity
+            if self.method == "linear":
+                idx = (start + i) % self.capacity
+            else:  # quadratic
+                idx = (start + i * i) % self.capacity
+
             if self.table[idx] is None:
                 return False
             if self.table[idx] == key:
